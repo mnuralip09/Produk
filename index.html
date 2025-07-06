@@ -1,4 +1,3 @@
-<?php include 'koneksi.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -11,29 +10,29 @@
   <h2>Sistem Monitoring Produksi Sarung Tangan</h2>
 
   <div class="form-container">
-    <form action="simpan.php" method="POST">
+    <form onsubmit="simpanData(event)">
       <label>Tanggal:</label>
-      <input type="date" name="tanggal" required><br>
+      <input type="date" id="tanggal" required><br>
 
       <label>Shift:</label>
-      <select name="shift" required>
+      <select id="shift" required>
         <option value="Pagi">Pagi</option>
         <option value="Siang">Siang</option>
         <option value="Malam">Malam</option>
       </select><br>
 
       <label>Jumlah:</label>
-      <input type="number" name="jumlah" required><br>
+      <input type="number" id="jumlah" required><br>
 
       <label>Jenis Produk:</label>
-      <select name="jenis" required>
+      <select id="jenis" required>
         <option value="Golf">Golf</option>
         <option value="Rally">Rally</option>
         <option value="Gardening">Gardening</option>
       </select><br>
 
       <label>Pekerja:</label>
-      <input type="text" name="pekerja" required><br>
+      <input type="text" id="pekerja" required><br>
 
       <button type="submit">Simpan</button>
     </form>
@@ -48,40 +47,64 @@
   </div>
 
   <script>
-    // Contoh data dummy
-    const dataHarian = {
-      labels: ['Sen', 'Man', 'Tie', 'Wai', 'Tah', 'Min'],
-      datasets: [{
-        label: 'Produksi',
-        data: [700, 500, 800, 600, 750, 650],
-        borderColor: 'blue',
-        fill: false,
-        tension: 0.1
-      }]
-    };
-
-    const configLine = {
-      type: 'line',
-      data: dataHarian
-    };
-
-    new Chart(document.getElementById('chartHarian'), configLine);
+    // Data dummy awal
+    const dataProduksi = [
+      { hari: 'Sen', jumlah: 700 },
+      { hari: 'Man', jumlah: 500 },
+      { hari: 'Tie', jumlah: 800 },
+      { hari: 'Wai', jumlah: 600 },
+      { hari: 'Tah', jumlah: 750 },
+      { hari: 'Min', jumlah: 650 }
+    ];
 
     const dataPie = {
-      labels: ['Golf', 'Rally', 'Gardening'],
-      datasets: [{
-        label: 'Produksi',
-        data: [40, 30, 30],
-        backgroundColor: ['#3b82f6', '#f59e0b', '#10b981']
-      }]
+      Golf: 300,
+      Rally: 250,
+      Gardening: 250
     };
 
-    const configPie = {
+    // Render chart harian
+    const chartHarian = new Chart(document.getElementById('chartHarian'), {
+      type: 'line',
+      data: {
+        labels: dataProduksi.map(d => d.hari),
+        datasets: [{
+          label: 'Produksi',
+          data: dataProduksi.map(d => d.jumlah),
+          borderColor: 'blue',
+          fill: false,
+          tension: 0.1
+        }]
+      }
+    });
+
+    // Render pie chart
+    const chartPie = new Chart(document.getElementById('chartPie'), {
       type: 'pie',
-      data: dataPie
-    };
+      data: {
+        labels: Object.keys(dataPie),
+        datasets: [{
+          data: Object.values(dataPie),
+          backgroundColor: ['#3b82f6', '#f59e0b', '#10b981']
+        }]
+      }
+    });
 
-    new Chart(document.getElementById('chartPie'), configPie);
+    // Fungsi menyimpan data lokal (tanpa PHP)
+    function simpanData(e) {
+      e.preventDefault();
+
+      const jenis = document.getElementById("jenis").value;
+      const jumlah = parseInt(document.getElementById("jumlah").value);
+
+      // Simulasikan penambahan ke pie chart
+      dataPie[jenis] += jumlah;
+      chartPie.data.datasets[0].data = Object.values(dataPie);
+      chartPie.update();
+
+      alert("Data berhasil disimpan (simulasi HTML-only)");
+      e.target.reset();
+    }
   </script>
 </body>
 </html>
