@@ -1,0 +1,27 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+.form-container {
+  background: #f3f3f3;
+  padding: 20px;
+  width: 300px;
+  float: left;
+  margin-right: 30px;
+}
+
+form input, form select {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.dashboard {
+  float: left;
+  width: 600px;
+}
+
+canvas {
+  margin-top: 20px;
+  max-width: 100%;
+}
