@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Produksi Sarung Tangan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+      color: #111827;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+    h1 {
+      color: #2563eb;
+      font-size: 28px;
+      margin-bottom: 0;
+    }
+    h2 {
+      font-size: 16px;
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+    .form-box, .table-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+    .form-box input, .form-box select, .form-box button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+    }
+    .form-box button {
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      background: #3b82f6;
+      color: white;
+    }
+    tr:hover {
+      background: #f0f9ff;
+    }
+    .btn-edit, .btn-delete {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-edit {
+      background: #fbbf24;
+      color: white;
+    }
+    .btn-delete {
+      background: #ef4444;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📦 Dashboard Produksi</h1>
+    <h2>Sarung Tangan Harian</h2>
+
+    <div class="form-box">
+      <h3>Input Data Produksi</h3>
+      <form id="form">
+        <input type="date" id="tanggal" required>
+        <select id="shift">
+          <option>Pagi</option><option>Siang</option><option>Malam</option>
+        </select>
+        <input type="number" id="jumlah" placeholder="Jumlah" required>
+        <select id="jenis">
+          <option>Golf</option><option>Rally</option><option>Gardening</option>
+        </select>
+        <input type="text" id="pekerja" placeholder="Nama Pekerja" required>
+        <button type="submit">Simpan</button>
+      </form>
+    </div>
+
+    <div class="table-box">
+      <h3>📋 Data Produksi</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th><th>Tanggal</th><th>Shift</th><th>Jumlah</th><th>Jenis</th><th>Pekerja</th><th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="dataBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let data = [];
+    let editIndex = -1;
+
+    document.getElementById("form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const tanggal = document.getElementById("tanggal").value;
+      const shift = document.getElementById("shift").value;
+      const jumlah = document.getElementById("jumlah").value;
+      const jenis = document.getElementById("jenis").value;
+      const pekerja = document.getElementById("pekerja").value;
+
+      const newData = { tanggal, shift, jumlah, jenis, pekerja };
+
+      if (editIndex === -1) {
+        data.push(newData);
+      } else {
+        data[editIndex] = newData;
+        editIndex = -1;
+      }
+      this.reset();
+      renderTable();
+    });
+
+    function renderTable() {
+      const tbody = document.getElementById("dataBody");
+      tbody.innerHTML = "";
+      data.forEach((item, i) => {
+        const row = `
+          <tr>
+            <td>${i+1}</td>
+            <td>${item.tanggal}</td>
+            <td>${item.shift}</td>
+            <td>${item.jumlah}</td>
+            <td>${item.jenis}</td>
+            <td>${item.pekerja}</td>
+            <td>
+              <button class="btn-edit" onclick="editData(${i})">Edit</button>
+              <button class="btn-delete" onclick="deleteData(${i})">Hapus</button>
+            </td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+    }
+
+    function editData(index) {
+      const item = data[index];
+      document.getElementById("tanggal").value = item.tanggal;
+      document.getElementById("shift").value = item.shift;
+      document.getElementById("jumlah").value = item.jumlah;
+      document.getElementById("jenis").value = item.jenis;
+      document.getElementById("pekerja").value = item.pekerja;
+      editIndex = index;
+    }
+
+    function deleteData(index) {
+      if (confirm("Yakin ingin menghapus data ini?")) {
+        data.splice(index, 1);
+        renderTable();
+      }
+    }
+  </script>
+</body>
+</html>
