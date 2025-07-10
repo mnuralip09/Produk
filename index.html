@@ -3,53 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <title>Monitoring Produksi Sarung Tangan</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Sistem Monitoring Produksi</h1>
-    <h2>Sarung Tangan</h2>
+    <h1>📦 Monitoring Produksi</h1>
+    <h2>Sarung Tangan Harian</h2>
 
-    <div class="content">
-      <div class="form-card">
-        <h3>Input Produksi Harian</h3>
+    <div class="layout">
+      <div class="form-box">
+        <h3>Input Produksi</h3>
         <form onsubmit="simpanData(event)">
-          <label for="tanggal">Tanggal</label>
+          <label>Tanggal</label>
           <input type="date" id="tanggal" required>
 
-          <label for="shift">Shift</label>
+          <label>Shift</label>
           <select id="shift" required>
-            <option value="Pagi">Pagi</option>
-            <option value="Siang">Siang</option>
-            <option value="Malam">Malam</option>
+            <option>Pagi</option>
+            <option>Siang</option>
+            <option>Malam</option>
           </select>
 
-          <label for="jumlah">Jumlah</label>
+          <label>Jumlah</label>
           <input type="number" id="jumlah" required>
 
-          <label for="jenis">Jenis Produk</label>
+          <label>Jenis Produk</label>
           <select id="jenis" required>
-            <option value="Golf">Golf</option>
-            <option value="Rally">Rally</option>
-            <option value="Gardening">Gardening</option>
+            <option>Golf</option>
+            <option>Rally</option>
+            <option>Gardening</option>
           </select>
 
-          <label for="pekerja">Nama Pekerja</label>
+          <label>Pekerja</label>
           <input type="text" id="pekerja" required>
 
           <button type="submit">Simpan</button>
         </form>
       </div>
 
-      <div class="dashboard">
-        <div class="chart-card">
-          <h3>Produksi Harian</h3>
+      <div class="chart-area">
+        <div class="card">
+          <h4>📈 Produksi Harian</h4>
           <canvas id="chartHarian"></canvas>
         </div>
-        <div class="chart-card">
-          <h3>Produksi per Jenis Produk</h3>
+        <div class="card">
+          <h4>🎯 Produksi per Jenis</h4>
           <canvas id="chartPie"></canvas>
         </div>
       </div>
@@ -60,12 +61,12 @@
     const dataPie = { Golf: 300, Rally: 250, Gardening: 250 };
 
     const chartPie = new Chart(document.getElementById('chartPie'), {
-      type: 'pie',
+      type: 'doughnut',
       data: {
         labels: Object.keys(dataPie),
         datasets: [{
           data: Object.values(dataPie),
-          backgroundColor: ['#60A5FA', '#FBBF24', '#34D399']
+          backgroundColor: ['#3b82f6', '#facc15', '#10b981']
         }]
       }
     });
@@ -86,11 +87,10 @@
         datasets: [{
           label: 'Jumlah Produksi',
           data: dataHarian.map(d => d.jumlah),
-          borderColor: '#3B82F6',
-          backgroundColor: '#DBEAFE',
+          borderColor: '#6366f1',
+          backgroundColor: '#dbeafe',
           fill: true,
-          tension: 0.3,
-          pointRadius: 4
+          tension: 0.3
         }]
       }
     });
@@ -102,7 +102,7 @@
       dataPie[jenis] += jumlah;
       chartPie.data.datasets[0].data = Object.values(dataPie);
       chartPie.update();
-      alert("Data berhasil disimpan (simulasi)");
+      alert("✅ Data berhasil disimpan (simulasi)");
       e.target.reset();
     }
   </script>
